@@ -3,290 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Product Passport - TU Clausthal</title>
+    <title>Digital Product Passport</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        :root {
-            --primary: #1b7d6e;
-            --primary-light: #2d9b7f;
-            --primary-dark: #0d5a50;
-            --accent: #d4a574;
-            --bg-light: #f9f7f4;
-            --bg-white: #ffffff;
-            --text-dark: #1a1a1a;
-            --text-gray: #666;
-            --border-color: #e0e0e0;
-            --success: #27ae60;
-            --error: #e74c3c;
-        }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-light);
-            color: var(--text-dark);
-            line-height: 1.6;
+            background: #f5f5f5;
+            color: #333;
         }
-
         header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            background: linear-gradient(135deg, #1b7d6e 0%, #0d5a50 100%);
             color: white;
-            padding: 15px 0;
+            padding: 20px;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-
         .header-content {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 0 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
         }
-
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-
-        .logo-img {
-            height: 50px;
-            width: auto;
-            object-fit: contain;
-            filter: brightness(1.15) drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-        }
-
-        .header-right {
-            display: flex;
-            gap: 25px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        nav {
-            display: flex;
-            gap: 25px;
-        }
-
+        .logo { font-size: 24px; font-weight: bold; }
+        nav { display: flex; gap: 20px; }
         nav button {
             background: none;
             border: none;
             color: white;
             cursor: pointer;
-            font-size: 15px;
-            font-weight: 500;
+            font-size: 14px;
             padding: 8px 16px;
-            border-radius: 6px;
-            transition: all 0.3s ease;
+            border-radius: 4px;
+            transition: 0.3s;
         }
-
-        nav button:hover {
-            background: rgba(255,255,255,0.15);
-            transform: translateY(-2px);
+        nav button:hover, nav button.active {
+            background: rgba(255,255,255,0.2);
         }
-
-        nav button.active {
-            background: rgba(255,255,255,0.25);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-
         .user-menu {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             align-items: center;
         }
-
-        .user-info {
-            background: rgba(255,255,255,0.15);
-            padding: 10px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
         .btn-auth {
-            background: linear-gradient(135deg, var(--accent) 0%, #c39a6b 100%);
-            padding: 10px 20px;
-            border-radius: 6px;
+            background: #d4a574;
             color: white;
             border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 14px;
             font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
-
-        .btn-auth:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-
+        .btn-auth:hover { opacity: 0.9; }
         main {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 50px 30px;
-            min-height: calc(100vh - 140px);
+            padding: 40px 20px;
         }
-
-        .page {
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
+        .page { display: none; }
+        .page.active { display: block; }
         .hero {
             text-align: center;
-            margin-bottom: 60px;
-            padding: 60px 20px;
-            background: linear-gradient(135deg, rgba(27, 125, 110, 0.05) 0%, rgba(212, 165, 116, 0.05) 100%);
-            border-radius: 15px;
-            border: 2px solid rgba(27, 125, 110, 0.1);
+            margin-bottom: 40px;
+            padding: 40px;
+            background: white;
+            border-radius: 8px;
         }
-
-        .hero h1 {
-            font-size: 52px;
-            margin-bottom: 20px;
-            color: var(--primary);
-            font-weight: 700;
-        }
-
-        .hero p {
-            font-size: 18px;
-            color: var(--text-gray);
-            max-width: 700px;
-            margin: 0 auto 40px;
-            line-height: 1.8;
-        }
-
+        .hero h1 { font-size: 36px; margin-bottom: 20px; color: #1b7d6e; }
+        .hero p { font-size: 16px; margin-bottom: 20px; color: #666; }
         .cta-buttons {
             display: flex;
-            gap: 20px;
+            gap: 10px;
             justify-content: center;
             flex-wrap: wrap;
         }
-
         .btn {
-            padding: 14px 35px;
+            padding: 12px 30px;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: 0.3s;
+        }
+        .btn-primary {
+            background: #1b7d6e;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #0d5a50;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
+        .card h3 {
+            color: #1b7d6e;
+            margin-bottom: 10px;
         }
-
-        .btn-primary:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 16px rgba(27, 125, 110, 0.3);
-        }
-
-        .products-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-
-        .product-card {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            border: 1px solid var(--border-color);
-        }
-
-        .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
-        }
-
-        .product-header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 25px;
-            text-align: center;
-        }
-
-        .product-header h3 {
-            font-size: 20px;
-            margin-bottom: 8px;
-            font-weight: 700;
-        }
-
-        .product-body {
-            padding: 25px;
-        }
-
-        .product-details {
-            margin-bottom: 12px;
-            font-size: 15px;
-        }
-
-        .product-details strong {
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 8px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .product-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .btn-delete {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
+        .card p {
+            color: #666;
             font-size: 14px;
-            background: #ffe5e5;
-            color: var(--error);
-            transition: all 0.3s ease;
+            margin-bottom: 10px;
         }
-
-        .btn-delete:hover {
-            background: var(--error);
+        .btn-delete {
+            background: #e74c3c;
             color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
         }
-
+        .btn-delete:hover {
+            background: #c0392b;
+        }
         .modal {
             display: none;
             position: fixed;
@@ -295,370 +134,222 @@
             width: 100%;
             height: 100%;
             background: rgba(0,0,0,0.6);
-            z-index: 2000;
+            z-index: 1000;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(4px);
         }
-
         .modal.active {
             display: flex;
-            animation: slideUp 0.4s ease;
         }
-
-        @keyframes slideUp {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
         .modal-content {
             background: white;
-            padding: 45px;
-            border-radius: 12px;
+            padding: 40px;
+            border-radius: 8px;
             width: 90%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+            max-width: 400px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
         }
-
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
-
         .modal-header h2 {
-            color: var(--primary);
-            font-size: 26px;
+            color: #1b7d6e;
+            font-size: 24px;
             margin: 0;
         }
-
         .modal-close {
             background: none;
             border: none;
-            font-size: 28px;
+            font-size: 24px;
             cursor: pointer;
-            color: var(--text-gray);
-            transition: color 0.3s;
         }
-
-        .modal-close:hover {
-            color: var(--primary);
-        }
-
-        .modal-tabs {
+        .tabs {
             display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
-            border-bottom: 2px solid var(--border-color);
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
         }
-
-        .modal-tab {
-            padding: 12px 24px;
+        .tab {
+            padding: 10px 20px;
             background: none;
             border: none;
             cursor: pointer;
-            color: var(--text-gray);
+            color: #666;
             font-weight: 600;
             border-bottom: 3px solid transparent;
-            margin: -2px 0 -2px 0;
-            transition: all 0.3s;
+            margin-bottom: -2px;
         }
-
-        .modal-tab.active {
-            color: var(--primary);
-            border-bottom-color: var(--primary);
+        .tab.active {
+            color: #1b7d6e;
+            border-bottom-color: #1b7d6e;
         }
-
-        .modal-form { display: none; }
-        .modal-form.active { display: block; }
-
-        .form-group { margin-bottom: 20px; }
-
+        .form-group {
+            margin-bottom: 15px;
+        }
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             font-weight: 600;
             font-size: 14px;
-            color: var(--text-dark);
         }
-
-        input[type="text"],
-        input[type="email"],
-        input[type="password"],
-        input[type="date"],
-        input[type="number"],
-        select,
-        textarea,
-        input[type="file"] {
+        input, select, textarea {
             width: 100%;
-            padding: 12px 14px;
-            border: 2px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
             font-family: inherit;
-            transition: all 0.3s;
         }
-
-        input:focus,
-        select:focus,
-        textarea:focus {
+        input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(27, 125, 110, 0.1);
+            border-color: #1b7d6e;
+            box-shadow: 0 0 0 3px rgba(27, 125, 110, 0.1);
         }
-
         textarea {
-            min-height: 100px;
+            min-height: 80px;
             resize: vertical;
         }
-
-        .public-toggle {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 25px 0;
-            padding: 15px;
-            background: rgba(27, 125, 110, 0.05);
-            border-radius: 8px;
-            border-left: 4px solid var(--primary);
-        }
-
-        .auth-error {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 14px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            display: none;
-            font-size: 14px;
-            border-left: 4px solid var(--error);
-        }
-
-        .auth-error.show { display: block; }
-
         .btn-submit {
             width: 100%;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            background: #1b7d6e;
             color: white;
-            padding: 14px;
+            padding: 12px;
             border: none;
             border-radius: 6px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
-
         .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            background: #0d5a50;
         }
-
-        .loading {
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
             display: none;
-            text-align: center;
-            padding: 20px;
-            color: var(--primary);
-            font-weight: 600;
         }
-
-        .loading.show { display: block; }
-
+        .error.show {
+            display: block;
+        }
         .empty-state {
             text-align: center;
-            padding: 80px 20px;
-            color: var(--text-gray);
+            padding: 60px 20px;
+            color: #666;
         }
-
         .empty-state h3 {
-            font-size: 28px;
-            margin-bottom: 15px;
-            color: var(--primary);
-            font-weight: 700;
-        }
-
-        .file-list {
-            margin-top: 15px;
-            padding: 15px;
-            background: #f5f5f5;
-            border-radius: 6px;
-        }
-
-        @media (max-width: 768px) {
-            .header-content {
-                padding: 0 15px;
-                flex-direction: column;
-                gap: 15px;
-            }
-            nav {
-                width: 100%;
-                justify-content: center;
-                gap: 10px;
-                flex-wrap: wrap;
-            }
-            main {
-                padding: 30px 15px;
-            }
-            .modal-content {
-                padding: 30px 20px;
-                width: 95%;
-            }
-            .hero h1 { font-size: 36px; }
-            .products-container { grid-template-columns: 1fr; }
-            .btn { width: 100%; max-width: 300px; }
+            color: #1b7d6e;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
     <header>
         <div class="header-content">
-            <div class="logo-section">
-                <svg class="logo-img" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <style>
-                            .logo-circle { fill: none; stroke: white; stroke-width: 2; }
-                            .logo-arrows { fill: white; }
-                        </style>
-                    </defs>
-                    <circle cx="100" cy="100" r="90" class="logo-circle"/>
-                    <g class="logo-arrows" opacity="0.9">
-                        <path d="M100,30 L110,50 L90,50 Z"/>
-                        <path d="M170,100 L150,110 L150,90 Z"/>
-                        <path d="M100,170 L90,150 L110,150 Z"/>
-                        <path d="M30,100 L50,90 L50,110 Z"/>
-                    </g>
-                    <rect x="85" y="85" width="30" height="30" rx="3" fill="white" opacity="0.3"/>
-                    <rect x="90" y="90" width="20" height="20" rx="2" fill="white" opacity="0.6"/>
-                    <circle cx="50" cy="50" r="3" fill="white" opacity="0.7"/>
-                    <circle cx="150" cy="50" r="3" fill="white" opacity="0.7"/>
-                    <circle cx="50" cy="150" r="3" fill="white" opacity="0.7"/>
-                    <circle cx="150" cy="150" r="3" fill="white" opacity="0.7"/>
-                </svg>
-                <span>DPP Platform</span>
-            </div>
-            <div class="header-right">
-                <nav>
-                    <button class="nav-btn active" data-page="home">Home</button>
-                    <button class="nav-btn" data-page="products">Explore</button>
-                    <button class="nav-btn" data-page="submit">Submit</button>
-                    <button class="nav-btn" data-page="my-products">My Passports</button>
-                </nav>
-                <div class="user-menu">
-                    <div id="userInfo" class="user-info" style="display:none;">
-                        <span id="userName"></span>
-                    </div>
-                    <button class="btn-auth" id="authBtn" onclick="openAuthModal()">Login / Register</button>
-                    <button class="btn-auth" id="logoutBtn" onclick="logout()" style="display:none; background:#e74c3c;">Logout</button>
+            <div class="logo">🔐 DPP Platform</div>
+            <nav>
+                <button class="nav-btn active" data-page="home">Home</button>
+                <button class="nav-btn" data-page="products">Explore</button>
+                <button class="nav-btn" data-page="submit">Submit</button>
+                <button class="nav-btn" data-page="my-products">My Passports</button>
+            </nav>
+            <div class="user-menu">
+                <div id="userInfo" style="display:none; background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 20px;">
+                    <span id="userName"></span>
                 </div>
+                <button class="btn-auth" id="authBtn" onclick="openAuthModal()">Login</button>
+                <button class="btn-auth" id="logoutBtn" onclick="logout()" style="display:none; background: #e74c3c;">Logout</button>
             </div>
         </div>
     </header>
 
     <main>
-        <!-- HOME PAGE -->
+        <!-- HOME -->
         <div class="page active" id="home">
-            <section class="hero">
+            <div class="hero">
                 <h1>🌍 Digital Product Passport</h1>
-                <p>Create comprehensive digital records for your products with complete lifecycle information, sustainability metrics, and circularity tracking.</p>
+                <p>Create comprehensive digital records for your products with complete lifecycle information.</p>
                 <div class="cta-buttons">
                     <button class="btn btn-primary" onclick="toggleAuth('login')">Login</button>
-                    <button class="btn btn-primary" onclick="toggleAuth('register')">Register Now</button>
+                    <button class="btn btn-primary" onclick="toggleAuth('register')">Register</button>
                 </div>
-            </section>
+            </div>
         </div>
 
-        <!-- EXPLORE PAGE -->
+        <!-- EXPLORE -->
         <div class="page" id="products">
-            <h2 style="margin-bottom: 40px; color: var(--primary); font-size: 32px; font-weight: 700;">🔍 Explore Public Passports</h2>
-            <div id="productsContainer" class="products-container"></div>
+            <h2 style="color: #1b7d6e; margin-bottom: 20px;">🔍 Explore Public Passports</h2>
+            <div id="productsContainer" class="grid"></div>
         </div>
 
-        <!-- MY PASSPORTS PAGE -->
+        <!-- MY PASSPORTS -->
         <div class="page" id="my-products">
-            <h2 style="margin-bottom: 40px; color: var(--primary); font-size: 32px; font-weight: 700;">📋 My Product Passports</h2>
-            <div id="myProductsContainer" class="products-container"></div>
+            <h2 style="color: #1b7d6e; margin-bottom: 20px;">📋 My Passports</h2>
+            <div id="myProductsContainer" class="grid"></div>
         </div>
 
-        <!-- SUBMIT PAGE -->
+        <!-- SUBMIT -->
         <div class="page" id="submit">
-            <div style="max-width: 900px; margin: 0 auto; background: white; padding: 45px; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
-                <h2 style="color: var(--primary); margin-bottom: 30px; font-size: 28px; font-weight: 700;">📝 Submit Product Passport</h2>
-                
-                <div class="public-toggle">
-                    <input type="checkbox" id="isPublic" checked>
-                    <label for="isPublic" style="margin:0;">Make this passport public (visible to classmates)</label>
-                </div>
-
+            <div style="background: white; padding: 30px; border-radius: 8px; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #1b7d6e; margin-bottom: 20px;">📝 Submit Passport</h2>
                 <form id="passportForm" enctype="multipart/form-data">
-                    <div style="margin-bottom: 30px;">
-                        <h3 style="color: var(--primary); margin-bottom: 20px; font-size: 18px; font-weight: 700;">📌 Basic Information</h3>
-                        <div class="form-group">
-                            <label>Product Name *</label>
-                            <input type="text" id="productName" required placeholder="e.g., Smartphone X Pro">
-                        </div>
-                        <div class="form-group">
-                            <label>Serial Number *</label>
-                            <input type="text" id="serialNumber" required placeholder="e.g., SN-2024-001">
-                        </div>
-                        <div class="form-group">
-                            <label>Product Number *</label>
-                            <input type="text" id="productNumber" required placeholder="e.g., PRD-001">
-                        </div>
-                        <div class="form-group">
-                            <label>Manufacturing Date *</label>
-                            <input type="date" id="manufacturingDate" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Country of Origin *</label>
-                            <input type="text" id="countryOfOrigin" required placeholder="e.g., Germany">
-                        </div>
+                    <div class="form-group">
+                        <label>Product Name *</label>
+                        <input type="text" id="productName" required>
                     </div>
-
-                    <div style="margin-bottom: 30px;">
-                        <h3 style="color: var(--primary); margin-bottom: 20px; font-size: 18px; font-weight: 700;">♻️ Materials & Sustainability</h3>
-                        <div class="form-group">
-                            <label>Average Lifetime (years) *</label>
-                            <input type="number" id="averageLifetime" min="1" required placeholder="e.g., 5">
-                        </div>
-                        <div class="form-group">
-                            <label>Recycled Content (%) *</label>
-                            <input type="number" id="recycledContent" min="0" max="100" required placeholder="e.g., 45">
-                        </div>
-                        <div class="form-group">
-                            <label>Material Composition *</label>
-                            <textarea id="materialComposition" required placeholder="Describe all materials used..."></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Spare Parts Availability *</label>
-                            <select id="sparePartsAvailability" required>
-                                <option value="">-- Select --</option>
-                                <option value="Readily Available">✅ Readily Available</option>
-                                <option value="Moderately Available">⚠️ Moderately Available</option>
-                                <option value="Limited">❌ Limited</option>
-                                <option value="Not Available">✖️ Not Available</option>
-                            </select>
-                        </div>
+                    <div class="form-group">
+                        <label>Serial Number *</label>
+                        <input type="text" id="serialNumber" required>
                     </div>
-
-                    <div style="margin-bottom: 30px;">
-                        <h3 style="color: var(--primary); margin-bottom: 20px; font-size: 18px; font-weight: 700;">📎 Upload Files</h3>
-                        <div class="form-group">
-                            <label>Upload Documentation (Images, PDFs, etc.) - Optional</label>
-                            <input type="file" id="files" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.gif">
-                            <small style="color: var(--text-gray); display:block; margin-top:8px;">Max 50MB per file. Multiple files supported.</small>
-                        </div>
-                        <div id="fileList" class="file-list" style="display:none;">
-                            <strong>Selected Files:</strong>
-                            <div id="selectedFiles"></div>
-                        </div>
+                    <div class="form-group">
+                        <label>Product Number *</label>
+                        <input type="text" id="productNumber" required>
                     </div>
-
-                    <button type="submit" class="btn-submit">🚀 Submit Passport</button>
-                    <div class="loading" id="submitLoading">⏳ Submitting your passport...</div>
+                    <div class="form-group">
+                        <label>Manufacturing Date *</label>
+                        <input type="date" id="manufacturingDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Country of Origin *</label>
+                        <input type="text" id="countryOfOrigin" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Average Lifetime (years) *</label>
+                        <input type="number" id="averageLifetime" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Recycled Content (%) *</label>
+                        <input type="number" id="recycledContent" min="0" max="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Material Composition *</label>
+                        <textarea id="materialComposition" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Spare Parts Availability *</label>
+                        <select id="sparePartsAvailability" required>
+                            <option value="">-- Select --</option>
+                            <option value="Readily Available">Readily Available</option>
+                            <option value="Moderately Available">Moderately Available</option>
+                            <option value="Limited">Limited</option>
+                            <option value="Not Available">Not Available</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="isPublic" checked> Make public
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>Upload Files (Optional)</label>
+                        <input type="file" id="files" multiple>
+                    </div>
+                    <button type="submit" class="btn-submit">Submit</button>
                 </form>
             </div>
         </div>
@@ -668,89 +359,65 @@
     <div class="modal" id="authModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>🔐 Student Account</h2>
+                <h2>Student Account</h2>
                 <button class="modal-close" onclick="closeAuthModal()">✕</button>
             </div>
-
-            <div class="modal-tabs">
-                <button class="modal-tab active" onclick="switchAuthTab('login')">Login</button>
-                <button class="modal-tab" onclick="switchAuthTab('register')">Register</button>
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('login')">Login</button>
+                <button class="tab" onclick="switchTab('register')">Register</button>
             </div>
 
-            <div class="modal-form active" id="loginForm">
-                <div class="auth-error" id="loginError"></div>
+            <div id="loginForm" class="form active">
+                <div class="error" id="loginError"></div>
                 <div class="form-group">
-                    <label>Email Address *</label>
-                    <input type="email" id="loginEmail" placeholder="your@email.com" required>
+                    <label>Email *</label>
+                    <input type="email" id="loginEmail" required>
                 </div>
                 <div class="form-group">
                     <label>Password *</label>
-                    <input type="password" id="loginPassword" placeholder="Enter password" required>
+                    <input type="password" id="loginPassword" required>
                 </div>
-                <button type="button" class="btn-submit" onclick="login()">Login</button>
-                <div class="loading" id="loginLoading">⏳ Logging in...</div>
+                <button class="btn-submit" onclick="login()">Login</button>
             </div>
 
-            <div class="modal-form" id="registerForm">
-                <div class="auth-error" id="registerError"></div>
+            <div id="registerForm" class="form" style="display:none;">
+                <div class="error" id="registerError"></div>
                 <div class="form-group">
-                    <label>Full Name *</label>
-                    <input type="text" id="registerName" placeholder="Your name" required>
+                    <label>Name *</label>
+                    <input type="text" id="registerName" required>
                 </div>
                 <div class="form-group">
-                    <label>Email Address *</label>
-                    <input type="email" id="registerEmail" placeholder="your@email.com" required>
+                    <label>Email *</label>
+                    <input type="email" id="registerEmail" required>
                 </div>
                 <div class="form-group">
                     <label>Password *</label>
-                    <input type="password" id="registerPassword" placeholder="Create password (min 6 chars)" required>
+                    <input type="password" id="registerPassword" required>
                 </div>
-                <button type="button" class="btn-submit" onclick="register()">Create Account</button>
-                <div class="loading" id="registerLoading">⏳ Creating account...</div>
+                <button class="btn-submit" onclick="register()">Register</button>
             </div>
         </div>
     </div>
 
     <script>
-        // CHANGE THIS to your Render backend URL when deployed
-        const API_URL = 'https://dpp-platform-tuc.onrender.com';
+        // CHANGE THIS TO YOUR RENDER URL WHEN DEPLOYED
+        const API_URL = 'http://localhost:3000';
 
         let authToken = localStorage.getItem('token');
         let currentUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
-
-        // FILE INPUT HANDLER
-        document.getElementById('files')?.addEventListener('change', (e) => {
-            const files = e.target.files;
-            const fileList = document.getElementById('selectedFiles');
-            const fileListContainer = document.getElementById('fileList');
-            
-            if (files.length > 0) {
-                fileList.innerHTML = '';
-                Array.from(files).forEach(file => {
-                    const fileSize = (file.size / 1024 / 1024).toFixed(2);
-                    fileList.innerHTML += `<div style="padding: 8px 0;">📄 ${file.name} (${fileSize}MB)</div>`;
-                });
-                fileListContainer.style.display = 'block';
-            } else {
-                fileListContainer.style.display = 'none';
-            }
-        });
 
         // NAVIGATION
         document.querySelectorAll('.nav-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const page = e.target.dataset.page;
-                
                 if ((page === 'submit' || page === 'my-products') && !authToken) {
-                    alert('📌 Please login first to access this feature');
+                    alert('Please login first');
                     openAuthModal();
                     return;
                 }
-
                 switchPage(page);
-                
                 if (page === 'products') loadPublicProducts();
-                else if (page === 'my-products') loadMyProducts();
+                if (page === 'my-products') loadMyProducts();
             });
         });
 
@@ -759,43 +426,36 @@
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(pageName).classList.add('active');
             document.querySelector(`[data-page="${pageName}"]`).classList.add('active');
-            window.scrollTo(0, 0);
         }
 
-        // AUTHENTICATION
+        // AUTH MODAL
         function openAuthModal() { document.getElementById('authModal').classList.add('active'); }
         function closeAuthModal() { document.getElementById('authModal').classList.remove('active'); }
-        
-        function switchAuthTab(tab) {
-            document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.modal-form').forEach(f => f.classList.remove('active'));
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.form').forEach(f => f.style.display = 'none');
             event.target.classList.add('active');
-            document.getElementById(tab + 'Form').classList.add('active');
+            document.getElementById(tab + 'Form').style.display = 'block';
         }
-        
-        function toggleAuth(tab) { openAuthModal(); switchAuthTab(tab); }
+        function toggleAuth(tab) {
+            openAuthModal();
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.form').forEach(f => f.style.display = 'none');
+            document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
+            document.getElementById(tab + 'Form').style.display = 'block';
+        }
 
         async function register() {
             const name = document.getElementById('registerName').value;
             const email = document.getElementById('registerEmail').value;
             const password = document.getElementById('registerPassword').value;
             const errorDiv = document.getElementById('registerError');
-            const loadingDiv = document.getElementById('registerLoading');
 
             if (!name || !email || !password) {
-                errorDiv.textContent = '❌ All fields required';
+                errorDiv.textContent = 'All fields required';
                 errorDiv.classList.add('show');
                 return;
             }
-
-            if (password.length < 6) {
-                errorDiv.textContent = '❌ Password must be at least 6 characters';
-                errorDiv.classList.add('show');
-                return;
-            }
-
-            errorDiv.classList.remove('show');
-            loadingDiv.classList.add('show');
 
             try {
                 const response = await fetch(`${API_URL}/auth/register`, {
@@ -805,11 +465,9 @@
                 });
 
                 const data = await response.json();
-
                 if (!response.ok) {
-                    errorDiv.textContent = '❌ ' + (data.error || 'Registration failed');
+                    errorDiv.textContent = data.error || 'Registration failed';
                     errorDiv.classList.add('show');
-                    loadingDiv.classList.remove('show');
                     return;
                 }
 
@@ -817,17 +475,13 @@
                 currentUser = data.user;
                 localStorage.setItem('token', authToken);
                 localStorage.setItem('user', JSON.stringify(currentUser));
-
                 updateAuthUI();
                 closeAuthModal();
-                loadingDiv.classList.remove('show');
-                alert('✅ Account created! Welcome ' + currentUser.studentName);
+                alert('Account created!');
                 switchPage('submit');
-
             } catch (error) {
-                errorDiv.textContent = '❌ Connection error: ' + error.message;
+                errorDiv.textContent = 'Error: ' + error.message;
                 errorDiv.classList.add('show');
-                loadingDiv.classList.remove('show');
             }
         }
 
@@ -835,16 +489,12 @@
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
             const errorDiv = document.getElementById('loginError');
-            const loadingDiv = document.getElementById('loginLoading');
 
             if (!email || !password) {
-                errorDiv.textContent = '❌ Email and password required';
+                errorDiv.textContent = 'Email and password required';
                 errorDiv.classList.add('show');
                 return;
             }
-
-            errorDiv.classList.remove('show');
-            loadingDiv.classList.add('show');
 
             try {
                 const response = await fetch(`${API_URL}/auth/login`, {
@@ -854,11 +504,9 @@
                 });
 
                 const data = await response.json();
-
                 if (!response.ok) {
-                    errorDiv.textContent = '❌ ' + (data.error || 'Login failed');
+                    errorDiv.textContent = data.error || 'Login failed';
                     errorDiv.classList.add('show');
-                    loadingDiv.classList.remove('show');
                     return;
                 }
 
@@ -866,17 +514,13 @@
                 currentUser = data.user;
                 localStorage.setItem('token', authToken);
                 localStorage.setItem('user', JSON.stringify(currentUser));
-
                 updateAuthUI();
                 closeAuthModal();
-                loadingDiv.classList.remove('show');
-                alert('✅ Welcome back, ' + currentUser.studentName + '!');
+                alert('Welcome!');
                 switchPage('submit');
-
             } catch (error) {
-                errorDiv.textContent = '❌ Connection error: ' + error.message;
+                errorDiv.textContent = 'Error: ' + error.message;
                 errorDiv.classList.add('show');
-                loadingDiv.classList.remove('show');
             }
         }
 
@@ -887,7 +531,6 @@
             localStorage.removeItem('user');
             updateAuthUI();
             switchPage('home');
-            alert('✅ Logged out successfully');
         }
 
         function updateAuthUI() {
@@ -908,22 +551,31 @@
             }
         }
 
-        // PRODUCTS
         async function loadPublicProducts() {
             try {
                 const response = await fetch(`${API_URL}/passports`);
                 const products = await response.json();
-                displayPublicProducts(products);
+                const container = document.getElementById('productsContainer');
+                if (!products || products.length === 0) {
+                    container.innerHTML = '<div class="empty-state" style="grid-column: 1/-1;">No public passports yet</div>';
+                    return;
+                }
+                container.innerHTML = products.map(p => `
+                    <div class="card">
+                        <h3>${p.productName}</h3>
+                        <p><strong>Serial:</strong> ${p.serialNumber}</p>
+                        <p><strong>Lifetime:</strong> ${p.averageLifetime} years</p>
+                        <p><strong>Recycled:</strong> ${p.recycledContent}%</p>
+                    </div>
+                `).join('');
             } catch (error) {
-                document.getElementById('productsContainer').innerHTML =
-                    '<div class="empty-state" style="grid-column:1/-1;"><h3>Connection Error</h3><p>⚠️ Unable to load products. Check if backend is running.</p></div>';
+                document.getElementById('productsContainer').innerHTML = '<div class="empty-state" style="grid-column: 1/-1;">Error loading products</div>';
             }
         }
 
         async function loadMyProducts() {
             if (!authToken) {
-                document.getElementById('myProductsContainer').innerHTML =
-                    '<div class="empty-state" style="grid-column:1/-1;"><h3>Login Required</h3><p>🔒 Please login to view your passports</p></div>';
+                document.getElementById('myProductsContainer').innerHTML = '<div class="empty-state" style="grid-column: 1/-1;">Login first</div>';
                 return;
             }
 
@@ -932,93 +584,44 @@
                     headers: { 'Authorization': `Bearer ${authToken}` }
                 });
                 const products = await response.json();
-                displayMyProducts(products);
+                const container = document.getElementById('myProductsContainer');
+                if (!products || products.length === 0) {
+                    container.innerHTML = '<div class="empty-state" style="grid-column: 1/-1;">No passports yet</div>';
+                    return;
+                }
+                container.innerHTML = products.map(p => `
+                    <div class="card">
+                        <h3>${p.productName}</h3>
+                        <p><strong>Serial:</strong> ${p.serialNumber}</p>
+                        <p><strong>Status:</strong> ${p.isPublic ? 'Public' : 'Private'}</p>
+                        <button class="btn-delete" onclick="deletePassport('${p._id}')">Delete</button>
+                    </div>
+                `).join('');
             } catch (error) {
-                document.getElementById('myProductsContainer').innerHTML =
-                    '<div class="empty-state" style="grid-column:1/-1;"><h3>Error</h3><p>⚠️ Failed to load your products</p></div>';
+                document.getElementById('myProductsContainer').innerHTML = '<div class="empty-state" style="grid-column: 1/-1;">Error loading passports</div>';
             }
-        }
-
-        function displayPublicProducts(products) {
-            const container = document.getElementById('productsContainer');
-
-            if (!products || products.length === 0) {
-                container.innerHTML =
-                    '<div class="empty-state" style="grid-column:1/-1;"><h3>No public passports yet</h3><p>🌍 Be the first to share a product passport!</p></div>';
-                return;
-            }
-
-            container.innerHTML = products.map(product => `
-                <div class="product-card">
-                    <div class="product-header">
-                        <h3>${product.productName}</h3>
-                        <p>Serial: ${product.serialNumber}</p>
-                    </div>
-                    <div class="product-body">
-                        <div class="status-badge">${product.status || 'Active'}</div>
-                        <div class="product-details"><strong>📧 Student:</strong> ${product.studentEmail}</div>
-                        <div class="product-details"><strong>🏷️ Product #:</strong> ${product.productNumber}</div>
-                        <div class="product-details"><strong>⏱️ Lifetime:</strong> ${product.averageLifetime} years</div>
-                        <div class="product-details"><strong>♻️ Recycled:</strong> ${product.recycledContent}%</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function displayMyProducts(products) {
-            const container = document.getElementById('myProductsContainer');
-
-            if (!products || products.length === 0) {
-                container.innerHTML =
-                    '<div class="empty-state" style="grid-column:1/-1;"><h3>No passports yet</h3><p>📝 <button class="btn btn-primary" onclick="switchPage(\'submit\')">Create Your First Passport</button></p></div>';
-                return;
-            }
-
-            container.innerHTML = products.map(product => `
-                <div class="product-card">
-                    <div class="product-header">
-                        <h3>${product.productName}</h3>
-                        <p>Serial: ${product.serialNumber}</p>
-                    </div>
-                    <div class="product-body">
-                        <div class="status-badge">${product.isPublic ? '🌍 Public' : '🔒 Private'}</div>
-                        <div class="product-details"><strong>🏷️ Product #:</strong> ${product.productNumber}</div>
-                        <div class="product-details"><strong>⏱️ Lifetime:</strong> ${product.averageLifetime} years</div>
-                        <div class="product-details"><strong>📅 Updated:</strong> ${new Date(product.updatedAt).toLocaleDateString()}</div>
-                        <div class="product-actions">
-                            <button class="btn-delete" onclick="deletePassport('${product._id}')">🗑️ Delete</button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
         }
 
         async function deletePassport(id) {
-            if (!confirm('Are you sure? This action cannot be undone.')) return;
-
+            if (!confirm('Delete this passport?')) return;
             try {
                 const response = await fetch(`${API_URL}/passports/${id}`, {
                     method: 'DELETE',
                     headers: { 'Authorization': `Bearer ${authToken}` }
                 });
-
                 if (response.ok) {
-                    alert('✅ Passport deleted successfully');
+                    alert('Deleted!');
                     loadMyProducts();
-                } else {
-                    alert('❌ Failed to delete passport');
                 }
             } catch (error) {
-                alert('❌ Error: ' + error.message);
+                alert('Error: ' + error.message);
             }
         }
 
-        // FORM SUBMISSION
         document.getElementById('passportForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-
             if (!authToken) {
-                alert('❌ Please login first');
+                alert('Login first');
                 return;
             }
 
@@ -1041,8 +644,6 @@
                 });
             }
 
-            document.getElementById('submitLoading').classList.add('show');
-
             try {
                 const response = await fetch(`${API_URL}/passports`, {
                     method: 'POST',
@@ -1051,25 +652,19 @@
                 });
 
                 const data = await response.json();
-
                 if (response.ok) {
-                    alert('✅ Passport submitted successfully!');
+                    alert('Submitted!');
                     document.getElementById('passportForm').reset();
-                    document.getElementById('fileList').style.display = 'none';
-                    document.getElementById('submitLoading').classList.remove('show');
                     switchPage('my-products');
                     loadMyProducts();
                 } else {
-                    alert('❌ Error: ' + (data.error || 'Submission failed'));
-                    document.getElementById('submitLoading').classList.remove('show');
+                    alert('Error: ' + data.error);
                 }
             } catch (error) {
-                alert('❌ Error: ' + error.message);
-                document.getElementById('submitLoading').classList.remove('show');
+                alert('Error: ' + error.message);
             }
         });
 
-        // INIT
         updateAuthUI();
     </script>
 </body>
