@@ -26,24 +26,23 @@ const storage = multer.diskStorage({
 
 const upload = multer({
     storage: storage,
-    limits: { fileSize: 50 * 1024 * 1024 } // 50 MB
+    limits: { fileSize: 50 * 1024 * 1024 }
 });
 
 // MONGODB CONNECTION
-const MONGODB_URI =
-    process.env.MONGODB_URI ||
-    'mongodb+srv://your-username:your-password@cluster0.mongodb.net/dpp?retryWrites=true&w=majority';
-
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://your-username:your-password@cluster0.mongodb.net/dpp?retryWrites=true&w=majority';
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-this-in-production';
 const PORT = process.env.PORT || 3000;
 
-mongoose
-    .connect(MONGODB_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    })
-    .then(() => console.log('✅ MongoDB Connected'))
-    .catch(err => console.log('❌ MongoDB Error:', err));
+mongoose.connect(MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => console.log('✅ MongoDB Connected'))
+.catch(err => {
+    console.log('⚠️ MongoDB Connection Error:', err.message);
+    console.log('Server will still start, but database features won\'t work');
+});
 
 // SCHEMAS
 const studentSchema = new mongoose.Schema({
@@ -82,9 +81,7 @@ const passportSchema = new mongoose.Schema({
 const Student = mongoose.model('Student', studentSchema);
 const Passport = mongoose.model('Passport', passportSchema);
 
-// AUTH ROUTES
-
-// REGISTER
+// AUTH ROUTES - REGISTER
 app.post('/auth/register', async (req, res) => {
     try {
         const { studentName, email, password } = req.body;
@@ -94,9 +91,7 @@ app.post('/auth/register', async (req, res) => {
         }
 
         if (password.length < 6) {
-            return res
-                .status(400)
-                .json({ error: 'Password must be at least 6 characters' });
+            return res.status(400).json({ error: 'Password must be at least 6 characters' });
         }
 
         const existingStudent = await Student.findOne({ email });
@@ -195,70 +190,63 @@ const verifyToken = (req, res, next) => {
     }
 };
 
-// PASSPORT ROUTES
+// PASSPORT ROUTES - CREATE
+app.post('/passports', verifyToken, upload.array('files'), async (req, res) => {
+    try {
+        const {
+            productName,
+            serialNumber,
+            productNumber,
+            manufacturingDate,
+            countryOfOrigin,
+            averageLifetime,
+            recycledContent,
+            materialComposition,
+            sparePartsAvailability,
+            isPublic
+        } = req.body;
 
-// CREATE PASSPORT
-app.post(
-    '/passports',
-    verifyToken,
-    upload.array('files'),
-    async (req, res) => {
-        try {
-            const {
-                productName,
-                serialNumber,
-                productNumber,
-                manufacturingDate,
-                countryOfOrigin,
-                averageLifetime,
-                recycledContent,
-                materialComposition,
-                sparePartsAvailability,
-                isPublic
-            } = req.body;
-
-            if (!productName || !serialNumber || !productNumber) {
-                return res.status(400).json({ error: 'Required fields missing' });
-            }
-
-            const uploadedFiles = req.files
-                ? req.files.map(file => ({
-                      filename: file.filename,
-                      originalName: file.originalname,
-                      fileSize: file.size,
-                      uploadedAt: new Date()
-                  }))
-                : [];
-
-            const passport = new Passport({
-                studentId: req.userId,
-                studentEmail: req.userEmail,
-                productName,
-                serialNumber,
-                productNumber,
-                manufacturingDate: new Date(manufacturingDate),
-                countryOfOrigin,
-                averageLifetime: parseInt(averageLifetime),
-                recycledContent: parseInt(recycledContent),
-                materialComposition,
-                sparePartsAvailability,
-                isPublic: isPublic === 'true' || isPublic === true,
-                uploadedFiles,
-                status: 'Active'
-            });
-
-            await passport.save();
-
-            res.status(201).json({
-                message: 'Passport created successfully',
-                passport
-            });
-        } catch (error) {
-            console.error('Create passport error:', error);
-            res.status(500).json({ error: 'Server error: ' + error.message });
+        if (!productName || !serialNumber || !productNumber) {
+            return res.status(400).json({ error: 'Required fields missing' });
         }
+
+        const uploadedFiles = req.files
+            ? req.files.map(file => ({
+                  filename: file.filename,
+                  originalName: file.originalname,
+                  fileSize: file.size,
+                  uploadedAt: new Date()
+              }))
+            : [];
+
+        const passport = new Passport({
+            studentId: req.userId,
+            studentEmail: req.userEmail,
+            productName,
+            serialNumber,
+            productNumber,
+            manufacturingDate: new Date(manufacturingDate),
+            countryOfOrigin,
+            averageLifetime: parseInt(averageLifetime),
+            recycledContent: parseInt(recycledContent),
+            materialComposition,
+            sparePartsAvailability,
+            isPublic: isPublic === 'true' || isPublic === true,
+            uploadedFiles,
+            status: 'Active'
+        });
+
+        await passport.save();
+
+        res.status(201).json({
+            message: 'Passport created successfully',
+            passport
+        });
+    } catch (error) {
+        console.error('Create passport error:', error);
+        res.status(500).json({ error: 'Server error: ' + error.message });
     }
-);
+});
 
 // GET ALL PUBLIC PASSPORTS
 app.get('/passports', async (req, res) => {
@@ -305,60 +293,49 @@ app.get('/passports/:id', async (req, res) => {
 });
 
 // UPDATE PASSPORT
-app.put(
-    '/passports/:id',
-    verifyToken,
-    upload.array('files'),
-    async (req, res) => {
-        try {
-            const passport = await Passport.findById(req.params.id);
+app.put('/passports/:id', verifyToken, upload.array('files'), async (req, res) => {
+    try {
+        const passport = await Passport.findById(req.params.id);
 
-            if (!passport) {
-                return res.status(404).json({ error: 'Passport not found' });
-            }
-
-            if (passport.studentId.toString() !== req.userId) {
-                return res.status(403).json({ error: 'Unauthorized' });
-            }
-
-            if (req.body.productName) passport.productName = req.body.productName;
-            if (req.body.serialNumber) passport.serialNumber = req.body.serialNumber;
-            if (req.body.productNumber) passport.productNumber = req.body.productNumber;
-            if (req.body.averageLifetime)
-                passport.averageLifetime = parseInt(req.body.averageLifetime);
-            if (req.body.recycledContent)
-                passport.recycledContent = parseInt(req.body.recycledContent);
-            if (req.body.materialComposition)
-                passport.materialComposition = req.body.materialComposition;
-            if (req.body.sparePartsAvailability)
-                passport.sparePartsAvailability = req.body.sparePartsAvailability;
-            if (req.body.isPublic !== undefined)
-                passport.isPublic =
-                    req.body.isPublic === 'true' || req.body.isPublic === true;
-
-            if (req.files && req.files.length > 0) {
-                const newFiles = req.files.map(file => ({
-                    filename: file.filename,
-                    originalName: file.originalname,
-                    fileSize: file.size,
-                    uploadedAt: new Date()
-                }));
-                passport.uploadedFiles = [...passport.uploadedFiles, ...newFiles];
-            }
-
-            passport.updatedAt = new Date();
-            await passport.save();
-
-            res.json({
-                message: 'Passport updated successfully',
-                passport
-            });
-        } catch (error) {
-            console.error('Update passport error:', error);
-            res.status(500).json({ error: 'Server error: ' + error.message });
+        if (!passport) {
+            return res.status(404).json({ error: 'Passport not found' });
         }
+
+        if (passport.studentId.toString() !== req.userId) {
+            return res.status(403).json({ error: 'Unauthorized' });
+        }
+
+        if (req.body.productName) passport.productName = req.body.productName;
+        if (req.body.serialNumber) passport.serialNumber = req.body.serialNumber;
+        if (req.body.productNumber) passport.productNumber = req.body.productNumber;
+        if (req.body.averageLifetime) passport.averageLifetime = parseInt(req.body.averageLifetime);
+        if (req.body.recycledContent) passport.recycledContent = parseInt(req.body.recycledContent);
+        if (req.body.materialComposition) passport.materialComposition = req.body.materialComposition;
+        if (req.body.sparePartsAvailability) passport.sparePartsAvailability = req.body.sparePartsAvailability;
+        if (req.body.isPublic !== undefined) passport.isPublic = req.body.isPublic === 'true' || req.body.isPublic === true;
+
+        if (req.files && req.files.length > 0) {
+            const newFiles = req.files.map(file => ({
+                filename: file.filename,
+                originalName: file.originalname,
+                fileSize: file.size,
+                uploadedAt: new Date()
+            }));
+            passport.uploadedFiles = [...passport.uploadedFiles, ...newFiles];
+        }
+
+        passport.updatedAt = new Date();
+        await passport.save();
+
+        res.json({
+            message: 'Passport updated successfully',
+            passport
+        });
+    } catch (error) {
+        console.error('Update passport error:', error);
+        res.status(500).json({ error: 'Server error: ' + error.message });
     }
-);
+});
 
 // DELETE PASSPORT
 app.delete('/passports/:id', verifyToken, async (req, res) => {
