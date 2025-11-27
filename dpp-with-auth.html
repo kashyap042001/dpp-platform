@@ -1,357 +1,1076 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Digital Product Passport</title>
-<style>
-  :root {
-    --color-primary: #2d7c6e;
-    --color-primary-hover: #245a54;
-    --color-accent: #e8a87c;
-    --color-bg: #f5f3f0;
-    --color-surface: #ffffff;
-    --color-text: #2c2c2c;
-    --color-text-light: #666666;
-    --color-border: #ddd;
-    --color-success: #27ae60;
-    --color-error: #e74c3c;
-  }
-  * { margin:0; padding:0; box-sizing: border-box; }
-  body { font-family: Arial, sans-serif; background-color: var(--color-bg); color: var(--color-text); line-height:1.6; }
-  header {
-    background: linear-gradient(135deg, var(--color-primary), #1e5a52);
-    padding:15px 20px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:999;
-  }
-  .logo {
-    display:flex; align-items:center; gap:10px; font-size:24px; font-weight:700; color:white;
-  }
-  .logo img { height:40px; width:auto; }
-  nav { display:flex; gap:15px; }
-  nav button {
-    background:none; border:none; color:white; font-size:16px; padding:8px 12px; cursor:pointer; border-radius:4px; transition: background 0.3s;
-  }
-  nav button:hover, nav button.active { background: rgba(255,255,255,0.2); }
-  .user-area { display:flex; align-items:center; gap:10px; }
-  .auth-btn, #logoutBtn {
-    padding:8px 15px; border:none; border-radius:4px; cursor:pointer; font-weight:600; font-size:14px; transition: background 0.3s; }
-  .auth-btn { background:#fff; color:var(--color-primary); }
-  #logoutBtn { background:#cc3; color:white; }
-  main { max-width:1200px; margin:20px auto; padding:10px; }
-  .page { display:none; opacity:0; transition: opacity 0.3s; }
-  .page.active { display:flex; flex-direction:column; opacity:1; animation: fadeIn 0.3s ease-in; }
-  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-  /* Sections styling */
-  .section { margin:20px 0; }
-  h1, h2 { color:var(--color-primary); margin-bottom:10px; }
-  .btn { padding:10px 20px; border:none; border-radius:4px; background:var(--color-primary); color:white; font-weight:600; cursor:pointer; margin:10px 0; transition: background 0.3s; }
-  .btn:hover { background:var(--color-primary-hover); }
-  /* Card styles */
-  .card {
-    background:white; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); margin-bottom:15px; padding:15px;
-  }
-  .card h3 { margin-bottom:8px; }
-  .buttons-group { display:flex; gap:10px; margin-top:10px; }
-  /* Modal styles */
-  .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:9999; }
-  .modal.active { display:flex; }
-  .modal-content { background:white; padding:20px; border-radius:8px; width:90%; max-width:500px; position:relative; }
-  .close-btn { position:absolute; top:10px; right:15px; background:none; border:none; font-size:24px; cursor:pointer; }
-  /* Form styles */
-  form { display:flex; flex-direction:column; gap:10px; }
-  input[type=text], input[type=date], input[type=number], select, textarea {
-    padding:10px; border:1px solid #ccc; border-radius:4px; font-size:14px; width:100%;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Product Passport - TU Clausthal</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #1b7d6e;
+            --primary-light: #2d9b7f;
+            --primary-dark: #0d5a50;
+            --accent: #d4a574;
+            --bg-light: #f9f7f4;
+            --bg-white: #ffffff;
+            --text-dark: #1a1a1a;
+            --text-gray: #666;
+            --border-color: #e0e0e0;
+            --success: #27ae60;
+            --error: #e74c3c;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .logo-img {
+            height: 50px;
+            width: auto;
+            object-fit: contain;
+            filter: brightness(1.15) drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+
+        .header-right {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        nav {
+            display: flex;
+            gap: 25px;
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        nav button:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-2px);
+        }
+
+        nav button.active {
+            background: rgba(255,255,255,0.25);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .user-menu {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .user-info {
+            background: rgba(255,255,255,0.15);
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .btn-auth {
+            background: linear-gradient(135deg, var(--accent) 0%, #c39a6b 100%);
+            padding: 10px 20px;
+            border-radius: 6px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .btn-auth:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 50px 30px;
+            min-height: calc(100vh - 140px);
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, rgba(27, 125, 110, 0.05) 0%, rgba(212, 165, 116, 0.05) 100%);
+            border-radius: 15px;
+            border: 2px solid rgba(27, 125, 110, 0.1);
+        }
+
+        .hero h1 {
+            font-size: 52px;
+            margin-bottom: 20px;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-gray);
+            max-width: 700px;
+            margin: 0 auto 40px;
+            line-height: 1.8;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 35px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(27, 125, 110, 0.3);
+        }
+
+        .products-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        }
+
+        .product-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .product-header h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .product-body {
+            padding: 25px;
+        }
+
+        .product-details {
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .product-details strong {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-delete {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            background: #ffe5e5;
+            color: var(--error);
+            transition: all 0.3s ease;
+        }
+
+        .btn-delete:hover {
+            background: var(--error);
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.active {
+            display: flex;
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            padding: 45px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header h2 {
+            color: var(--primary);
+            font-size: 26px;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--text-gray);
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: var(--primary);
+        }
+
+        .modal-tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .modal-tab {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-gray);
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            margin: -2px 0 -2px 0;
+            transition: all 0.3s;
+        }
+
+        .modal-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .modal-form { display: none; }
+        .modal-form.active { display: block; }
+
+        .form-group { margin-bottom: 20px; }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="date"],
+        input[type="number"],
+        select,
+        textarea,
+        input[type="file"] {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(27, 125, 110, 0.1);
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .public-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 25px 0;
+            padding: 15px;
+            background: rgba(27, 125, 110, 0.05);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .auth-error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 14px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 14px;
+            border-left: 4px solid var(--error);
+        }
+
+        .auth-error.show { display: block; }
+
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .loading.show { display: block; }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-gray);
+        }
+
+        .empty-state h3 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .file-list {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 6px;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 0 15px;
+                flex-direction: column;
+                gap: 15px;
+            }
+            nav {
+                width: 100%;
+                justify-content: center;
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+            main {
+                padding: 30px 15px;
+            }
+            .modal-content {
+                padding: 30px 20px;
+                width: 95%;
+            }
+            .hero h1 { font-size: 36px; }
+            .products-container { grid-template-columns: 1fr; }
+            .btn { width: 100%; max-width: 300px; }
+        }
+    </style>
 </head>
 <body>
-
-<header>
-  <div class="logo">
-    <img src="logo.png" alt="Logo" id="logoImage" />
-    <span>Product Passport System</span>
-  </div>
-  <nav>
-    <button data-page="home" class="active">Home</button>
-    <button data-page="products">Products</button>
-    <button data-page="submit">Submit</button>
-    <button data-page="myproducts">My Passports</button>
-  </nav>
-  <div class="user-area">
-    <button id="loginBtn" class="auth-btn">Login</button>
-    <button id="logoutBtn" style="display:none;" class="auth-btn">Logout</button>
-  </div>
-</header>
-
-<main>
-  <!-- Home Page -->
-  <div class="page active" id="home">
-    <h1>Welcome to the Digital Product Passport</h1>
-    <p>Manage your product data efficiently, with options to view, submit, and edit passports. Use navigation above to get started!</p>
-  </div>
-
-  <!-- Products View -->
-  <div class="page" id="products">
-    <h2>All Public Products</h2>
-    <div id="productsList">Loading...</div>
-  </div>
-
-  <!-- My Passports -->
-  <div class="page" id="myproducts">
-    <h2>My Passports</h2>
-    <div id="myProductsList">Loading...</div>
-  </div>
-
-  <!-- Submit or Edit Passport -->
-  <div class="page" id="submit">
-    <h2 id="formTitle">Submit New Passport</h2>
-    <form id="passportForm">
-      <!-- Basic Info -->
-      <h3>Basic Details</h3>
-      <input required placeholder="Product Name" id="productName"/>
-      <input required placeholder="Serial Number" id="serialNumber"/>
-      <input required placeholder="Product Number" id="productNumber"/>
-      <label>Manufacturing Date</label>
-      <input required type="date" id="manufacturingDate"/>
-      <input required placeholder="Country of Origin" id="country"/>
-      
-      <!-- Materials -->
-      <h3>Materials</h3>
-      <input required placeholder="Average Lifetime (years)" type="number" min="1" id="lifetime"/>
-      <input required placeholder="Recycled Content (%)" type="number" min="0" max="100" id="recycled"/>
-      <textarea required placeholder="Material Composition" id="materialComp"></textarea>
-      <select required id="spareParts">
-        <option value="">Select Spare Parts Availability</option>
-        <option>Readily Available</option>
-        <option>Moderately Available</option>
-        <option>Limited</option>
-        <option>Not Available</option>
-      </select>
-
-      <button class="btn" type="submit" id="submitBtn">Submit Passport</button>
-      <button class="btn" type="button" onclick="cancelEdit()" id="cancelEditBtn" style="display:none;">Cancel Edit</button>
-    </form>
-  </div>
-</main>
-
-<!-- Login/Register Modal -->
-<div class="modal" id="authModal">
-  <div class="modal-content">
-    <button class="close-btn" onclick="closeAuthModal()">×</button>
-    <h2>Account</h2>
-    <div style="display:flex; gap:10px; margin-bottom:10px;">
-      <button onclick="showLogin()" id="tabLogin" class="active">Login</button>
-      <button onclick="showRegister()" id="tabRegister">Register</button>
-    </div>
-    <div id="loginDiv" style="display:block;">
-      <input type="email" placeholder="Email" id="loginEmail" />
-      <input type="password" placeholder="Password" id="loginPass" />
-      <button class="btn" onclick="login()">Login</button>
-    </div>
-    <div id="registerDiv" style="display:none;">
-      <input placeholder="Name" id="regName" />
-      <input type="email" placeholder="Email" id="regEmail"/>
-      <input type="password" placeholder="Password" id="regPass"/>
-      <button class="btn" onclick="register()">Register</button>
-    </div>
-  </div>
-</div>
-
-<script>
-  const API_BASE_URL = 'https://YOUR-RENDER-URL'; // <-- Replace with your deployed URL
-  let token = localStorage.getItem('token') || '';
-  let currentUser = JSON.parse(localStorage.getItem('user') || '{}');
-  let editingId = null;
-
-  // Navigation Buttons
-  document.querySelectorAll('nav button').forEach(btn => {
-    btn.onclick = () => {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById(btn.dataset.page).classList.add('active');
-      if (btn.dataset.page==='products') loadPublicProducts();
-      if (btn.dataset.page==='myproducts') loadMyProducts();
-    };
-  });
-  // Logo buttons (optional, if logo is clickable)
-  
-  // Authentication Buttons
-  document.getElementById('loginBtn').onclick = () => { showLogin(); openAuthModal(); };
-  document.getElementById('logoutBtn').onclick = () => { logout(); };
-
-  function showLogin() {
-    document.getElementById('loginDiv').style.display='block';
-    document.getElementById('registerDiv').style.display='none';
-  }
-  function showRegister() {
-    document.getElementById('loginDiv').style.display='none';
-    document.getElementById('registerDiv').style.display='block';
-  }
-  
-  function openAuthModal() { document.getElementById('authModal').style.display='flex'; }
-  function closeAuthModal() { document.getElementById('authModal').style.display='none'; }
-  
-  function saveUserData(user, token) {
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(user));
-    location.reload();
-  }
-  function logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    location.reload();
-  }
-
-  // Login & Register
-  async function login() {
-    const email = document.getElementById('loginEmail').value;
-    const pass = document.getElementById('loginPass').value;
-    try {
-      let res = await fetch(`${API_BASE_URL}/auth/login`, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({email, password:pass})
-      });
-      let data = await res.json();
-      if(res.ok){ saveUserData(data.user, data.token); closeAuthModal(); }
-      else alert(data.error || 'Login failed');
-    } catch(e){ alert('Error connecting'); }
-  }
-
-  async function register() {
-    const name = document.getElementById('regName').value;
-    const email = document.getElementById('regEmail').value;
-    const pass = document.getElementById('regPass').value;
-    try {
-      let res = await fetch(`${API_BASE_URL}/auth/register`, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({studentName:name,email,password:pass})
-      });
-      let data= await res.json();
-      if(res.ok){ saveUserData(data.user, data.token); closeAuthModal(); }
-      else alert(data.error || 'Registration failed');
-    } catch(e){ alert('Error connecting'); }
-  }
-
-  // Load products
-  async function loadPublicProducts() {
-    const container = document.getElementById('productsList');
-    container.innerHTML='Loading...';
-    try {
-      let res = await fetch(`${API_BASE_URL}/passports`);
-      let data = await res.json();
-      if(data.length===0){container.innerHTML='No products yet.'; return;}
-      container.innerHTML = data.map(p => `
-        <div class="card">
-          <h3>${p.productName}</h3>
-          <p>Serial: ${p.serialNumber}</p>
-          <p>Product#: ${p.productNumber}</p>
-          <p>Lifetime: ${p.averageLifetime} years</p>
-          <p>Recycled: ${p.recycledContent}%</p>
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <svg class="logo-img" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <style>
+                            .logo-circle { fill: none; stroke: white; stroke-width: 2; }
+                            .logo-arrows { fill: white; }
+                        </style>
+                    </defs>
+                    <circle cx="100" cy="100" r="90" class="logo-circle"/>
+                    <g class="logo-arrows" opacity="0.9">
+                        <path d="M100,30 L110,50 L90,50 Z"/>
+                        <path d="M170,100 L150,110 L150,90 Z"/>
+                        <path d="M100,170 L90,150 L110,150 Z"/>
+                        <path d="M30,100 L50,90 L50,110 Z"/>
+                    </g>
+                    <rect x="85" y="85" width="30" height="30" rx="3" fill="white" opacity="0.3"/>
+                    <rect x="90" y="90" width="20" height="20" rx="2" fill="white" opacity="0.6"/>
+                    <circle cx="50" cy="50" r="3" fill="white" opacity="0.7"/>
+                    <circle cx="150" cy="50" r="3" fill="white" opacity="0.7"/>
+                    <circle cx="50" cy="150" r="3" fill="white" opacity="0.7"/>
+                    <circle cx="150" cy="150" r="3" fill="white" opacity="0.7"/>
+                </svg>
+                <span>DPP Platform</span>
+            </div>
+            <div class="header-right">
+                <nav>
+                    <button class="nav-btn active" data-page="home">Home</button>
+                    <button class="nav-btn" data-page="products">Explore</button>
+                    <button class="nav-btn" data-page="submit">Submit</button>
+                    <button class="nav-btn" data-page="my-products">My Passports</button>
+                </nav>
+                <div class="user-menu">
+                    <div id="userInfo" class="user-info" style="display:none;">
+                        <span id="userName"></span>
+                    </div>
+                    <button class="btn-auth" id="authBtn" onclick="openAuthModal()">Login / Register</button>
+                    <button class="btn-auth" id="logoutBtn" onclick="logout()" style="display:none; background:#e74c3c;">Logout</button>
+                </div>
+            </div>
         </div>
-      `).join('');
-    } catch { container.innerHTML='Error loading products'; }
-  }
+    </header>
 
-  async function loadMyProducts() {
-    if(!token){ alert('Login first'); return;}
-    const container = document.getElementById('myProductsList');
-    container.innerHTML='Loading...';
-    try {
-      let res = await fetch(`${API_BASE_URL}/passports/my`, {
-        headers:{'Authorization':'Bearer '+token}
-      });
-      let data= await res.json();
-      if(data.length===0){container.innerHTML='No your passports yet.'; return;}
-      container.innerHTML= data.map(p => `
-        <div class="card">
-          <h3>${p.productName}</h3>
-          <p>Serial: ${p.serialNumber}</p>
-          <p>Product#: ${p.productNumber}</p>
-          <p>Lifetime: ${p.averageLifetime} years</p>
-          <button onclick='editPassport("${p.id}")'>Edit</button>
-          <button onclick='deletePassport("${p.id}")'>Delete</button>
+    <main>
+        <!-- HOME PAGE -->
+        <div class="page active" id="home">
+            <section class="hero">
+                <h1>🌍 Digital Product Passport</h1>
+                <p>Create comprehensive digital records for your products with complete lifecycle information, sustainability metrics, and circularity tracking.</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary" onclick="toggleAuth('login')">Login</button>
+                    <button class="btn btn-primary" onclick="toggleAuth('register')">Register Now</button>
+                </div>
+            </section>
         </div>
-      `).join('');
-    } catch{ container.innerHTML='Error loading your products'; }
-  }
 
-  // Submit or Edit
-  document.getElementById('passportForm').onsubmit=async (e)=>{
-    e.preventDefault();
-    if(!token){ alert('Login required'); return; }
-    const data = {
-      productName: document.getElementById('productName').value,
-      serialNumber: document.getElementById('serialNumber').value,
-      productNumber: document.getElementById('productNumber').value,
-      manufacturingDate: document.getElementById('manufacturingDate').value,
-      countryOfOrigin: document.getElementById('country').value,
-      averageLifetime: document.getElementById('lifetime').value,
-      recycledContent: document.getElementById('recycled').value,
-      materialComposition: document.getElementById('materialComp').value,
-      sparePartsAvailability: document.getElementById('spareParts').value,
-      isPublic: document.getElementById('isPublic').checked
-    };
-    try {
-      let res;
-      if(editingId){
-        res = await fetch(`${API_BASE_URL}/passports/`+editingId, {
-          method:'PUT',
-          headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
-          body:JSON.stringify(data)
+        <!-- EXPLORE PAGE -->
+        <div class="page" id="products">
+            <h2 style="margin-bottom: 40px; color: var(--primary); font-size: 32px; font-weight: 700;">🔍 Explore Public Passports</h2>
+            <div id="productsContainer" class="products-container"></div>
+        </div>
+
+        <!-- MY PASSPORTS PAGE -->
+        <div class="page" id="my-products">
+            <h2 style="margin-bottom: 40px; color: var(--primary); font-size: 32px; font-weight: 700;">📋 My Product Passports</h2>
+            <div id="myProductsContainer" class="products-container"></div>
+        </div>
+
+        <!-- SUBMIT PAGE -->
+        <div class="page" id="submit">
+            <div style="max-width: 900px; margin: 0 auto; background: white; padding: 45px; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+                <h2 style="color: var(--primary); margin-bottom: 30px; font-size: 28px; font-weight: 700;">📝 Submit Product Passport</h2>
+                
+                <div class="public-toggle">
+                    <input type="checkbox" id="isPublic" checked>
+                    <label for="isPublic" style="margin:0;">Make this passport public (visible to classmates)</label>
+                </div>
+
+                <form id="passportForm" enctype="multipart/form-data">
+                    <div style="margin-bottom: 30px;">
+                        <h3 style="color: var(--primary); margin-bottom: 20px; font-size: 18px; font-weight: 700;">📌 Basic Information</h3>
+                        <div class="form-group">
+                            <label>Product Name *</label>
+                            <input type="text" id="productName" required placeholder="e.g., Smartphone X Pro">
+                        </div>
+                        <div class="form-group">
+                            <label>Serial Number *</label>
+                            <input type="text" id="serialNumber" required placeholder="e.g., SN-2024-001">
+                        </div>
+                        <div class="form-group">
+                            <label>Product Number *</label>
+                            <input type="text" id="productNumber" required placeholder="e.g., PRD-001">
+                        </div>
+                        <div class="form-group">
+                            <label>Manufacturing Date *</label>
+                            <input type="date" id="manufacturingDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Country of Origin *</label>
+                            <input type="text" id="countryOfOrigin" required placeholder="e.g., Germany">
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 30px;">
+                        <h3 style="color: var(--primary); margin-bottom: 20px; font-size: 18px; font-weight: 700;">♻️ Materials & Sustainability</h3>
+                        <div class="form-group">
+                            <label>Average Lifetime (years) *</label>
+                            <input type="number" id="averageLifetime" min="1" required placeholder="e.g., 5">
+                        </div>
+                        <div class="form-group">
+                            <label>Recycled Content (%) *</label>
+                            <input type="number" id="recycledContent" min="0" max="100" required placeholder="e.g., 45">
+                        </div>
+                        <div class="form-group">
+                            <label>Material Composition *</label>
+                            <textarea id="materialComposition" required placeholder="Describe all materials used..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Spare Parts Availability *</label>
+                            <select id="sparePartsAvailability" required>
+                                <option value="">-- Select --</option>
+                                <option value="Readily Available">✅ Readily Available</option>
+                                <option value="Moderately Available">⚠️ Moderately Available</option>
+                                <option value="Limited">❌ Limited</option>
+                                <option value="Not Available">✖️ Not Available</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 30px;">
+                        <h3 style="color: var(--primary); margin-bottom: 20px; font-size: 18px; font-weight: 700;">📎 Upload Files</h3>
+                        <div class="form-group">
+                            <label>Upload Documentation (Images, PDFs, etc.) - Optional</label>
+                            <input type="file" id="files" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.gif">
+                            <small style="color: var(--text-gray); display:block; margin-top:8px;">Max 50MB per file. Multiple files supported.</small>
+                        </div>
+                        <div id="fileList" class="file-list" style="display:none;">
+                            <strong>Selected Files:</strong>
+                            <div id="selectedFiles"></div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit">🚀 Submit Passport</button>
+                    <div class="loading" id="submitLoading">⏳ Submitting your passport...</div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- AUTH MODAL -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🔐 Student Account</h2>
+                <button class="modal-close" onclick="closeAuthModal()">✕</button>
+            </div>
+
+            <div class="modal-tabs">
+                <button class="modal-tab active" onclick="switchAuthTab('login')">Login</button>
+                <button class="modal-tab" onclick="switchAuthTab('register')">Register</button>
+            </div>
+
+            <div class="modal-form active" id="loginForm">
+                <div class="auth-error" id="loginError"></div>
+                <div class="form-group">
+                    <label>Email Address *</label>
+                    <input type="email" id="loginEmail" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Password *</label>
+                    <input type="password" id="loginPassword" placeholder="Enter password" required>
+                </div>
+                <button type="button" class="btn-submit" onclick="login()">Login</button>
+                <div class="loading" id="loginLoading">⏳ Logging in...</div>
+            </div>
+
+            <div class="modal-form" id="registerForm">
+                <div class="auth-error" id="registerError"></div>
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" id="registerName" placeholder="Your name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address *</label>
+                    <input type="email" id="registerEmail" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Password *</label>
+                    <input type="password" id="registerPassword" placeholder="Create password (min 6 chars)" required>
+                </div>
+                <button type="button" class="btn-submit" onclick="register()">Create Account</button>
+                <div class="loading" id="registerLoading">⏳ Creating account...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // CHANGE THIS to your Render backend URL when deployed
+        const API_URL = 'https://dpp-platform-tuc.onrender.com';
+
+        let authToken = localStorage.getItem('token');
+        let currentUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+
+        // FILE INPUT HANDLER
+        document.getElementById('files')?.addEventListener('change', (e) => {
+            const files = e.target.files;
+            const fileList = document.getElementById('selectedFiles');
+            const fileListContainer = document.getElementById('fileList');
+            
+            if (files.length > 0) {
+                fileList.innerHTML = '';
+                Array.from(files).forEach(file => {
+                    const fileSize = (file.size / 1024 / 1024).toFixed(2);
+                    fileList.innerHTML += `<div style="padding: 8px 0;">📄 ${file.name} (${fileSize}MB)</div>`;
+                });
+                fileListContainer.style.display = 'block';
+            } else {
+                fileListContainer.style.display = 'none';
+            }
         });
-      } else {
-        res = await fetch(`${API_BASE_URL}/passports`, {
-          method:'POST',
-          headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
-          body:JSON.stringify(data)
+
+        // NAVIGATION
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const page = e.target.dataset.page;
+                
+                if ((page === 'submit' || page === 'my-products') && !authToken) {
+                    alert('📌 Please login first to access this feature');
+                    openAuthModal();
+                    return;
+                }
+
+                switchPage(page);
+                
+                if (page === 'products') loadPublicProducts();
+                else if (page === 'my-products') loadMyProducts();
+            });
         });
-      }
-      let rData= await res.json();
-      if(res.ok){
-        alert(editingId?'Updated!':'Submitted!'); 
-        document.getElementById('passportForm').reset();
-        cancelEdit();
-        document.querySelector('.nav-btn[data-page="myproducts"]').click();
-        loadMyProducts();
-      }else{ alert(rData.error); }
-    } catch(e){ alert('Error saving'); }
-  };
 
-  function editPassport(id){
-    // load data, set editing
-    // For simplicity, we load from your local data (or refetch if backend supports)
-    // Implementation depends on backend
-    alert('Edit feature to be implemented'); // placeholder
-    // For now, you can implement a form fill with data from your backend
-  }
-  function cancelEdit(){ 
-    editingId=null; 
-    document.getElementById('passportForm').reset(); 
-    document.getElementById('formTitle').innerText='Submit New Passport'; 
-    document.getElementById('submitBtn').innerText='Submit Passport'; 
-    document.getElementById('cancelEditBtn').style.display='none'; 
-  }
+        function switchPage(pageName) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(pageName).classList.add('active');
+            document.querySelector(`[data-page="${pageName}"]`).classList.add('active');
+            window.scrollTo(0, 0);
+        }
 
-  // On load
-  window.onload= ()=>{ 
-    updateAuthUI(); 
-    loadPublicProducts(); 
-    if(localStorage.getItem('token')){ loadMyProducts(); }
-  };
+        // AUTHENTICATION
+        function openAuthModal() { document.getElementById('authModal').classList.add('active'); }
+        function closeAuthModal() { document.getElementById('authModal').classList.remove('active'); }
+        
+        function switchAuthTab(tab) {
+            document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.modal-form').forEach(f => f.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(tab + 'Form').classList.add('active');
+        }
+        
+        function toggleAuth(tab) { openAuthModal(); switchAuthTab(tab); }
 
-  function updateAuthUI() {
-    if(token){ 
-      document.getElementById('loginBtn').style.display='none'; 
-      document.getElementById('logoutBtn').style.display='block'; 
-    } else {
-      document.getElementById('loginBtn').style.display='block'; 
-      document.getElementById('logoutBtn').style.display='none'; 
-    }
-  }
-  // Your logo image is used in the header already as `logo.png`. Make sure it's in the same folder.
-</script>
+        async function register() {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const errorDiv = document.getElementById('registerError');
+            const loadingDiv = document.getElementById('registerLoading');
+
+            if (!name || !email || !password) {
+                errorDiv.textContent = '❌ All fields required';
+                errorDiv.classList.add('show');
+                return;
+            }
+
+            if (password.length < 6) {
+                errorDiv.textContent = '❌ Password must be at least 6 characters';
+                errorDiv.classList.add('show');
+                return;
+            }
+
+            errorDiv.classList.remove('show');
+            loadingDiv.classList.add('show');
+
+            try {
+                const response = await fetch(`${API_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ studentName: name, email, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    errorDiv.textContent = '❌ ' + (data.error || 'Registration failed');
+                    errorDiv.classList.add('show');
+                    loadingDiv.classList.remove('show');
+                    return;
+                }
+
+                authToken = data.token;
+                currentUser = data.user;
+                localStorage.setItem('token', authToken);
+                localStorage.setItem('user', JSON.stringify(currentUser));
+
+                updateAuthUI();
+                closeAuthModal();
+                loadingDiv.classList.remove('show');
+                alert('✅ Account created! Welcome ' + currentUser.studentName);
+                switchPage('submit');
+
+            } catch (error) {
+                errorDiv.textContent = '❌ Connection error: ' + error.message;
+                errorDiv.classList.add('show');
+                loadingDiv.classList.remove('show');
+            }
+        }
+
+        async function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorDiv = document.getElementById('loginError');
+            const loadingDiv = document.getElementById('loginLoading');
+
+            if (!email || !password) {
+                errorDiv.textContent = '❌ Email and password required';
+                errorDiv.classList.add('show');
+                return;
+            }
+
+            errorDiv.classList.remove('show');
+            loadingDiv.classList.add('show');
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    errorDiv.textContent = '❌ ' + (data.error || 'Login failed');
+                    errorDiv.classList.add('show');
+                    loadingDiv.classList.remove('show');
+                    return;
+                }
+
+                authToken = data.token;
+                currentUser = data.user;
+                localStorage.setItem('token', authToken);
+                localStorage.setItem('user', JSON.stringify(currentUser));
+
+                updateAuthUI();
+                closeAuthModal();
+                loadingDiv.classList.remove('show');
+                alert('✅ Welcome back, ' + currentUser.studentName + '!');
+                switchPage('submit');
+
+            } catch (error) {
+                errorDiv.textContent = '❌ Connection error: ' + error.message;
+                errorDiv.classList.add('show');
+                loadingDiv.classList.remove('show');
+            }
+        }
+
+        function logout() {
+            authToken = null;
+            currentUser = null;
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            updateAuthUI();
+            switchPage('home');
+            alert('✅ Logged out successfully');
+        }
+
+        function updateAuthUI() {
+            const authBtn = document.getElementById('authBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const userInfo = document.getElementById('userInfo');
+            const userName = document.getElementById('userName');
+
+            if (authToken && currentUser) {
+                authBtn.style.display = 'none';
+                logoutBtn.style.display = 'block';
+                userInfo.style.display = 'block';
+                userName.textContent = '👤 ' + currentUser.studentName;
+            } else {
+                authBtn.style.display = 'block';
+                logoutBtn.style.display = 'none';
+                userInfo.style.display = 'none';
+            }
+        }
+
+        // PRODUCTS
+        async function loadPublicProducts() {
+            try {
+                const response = await fetch(`${API_URL}/passports`);
+                const products = await response.json();
+                displayPublicProducts(products);
+            } catch (error) {
+                document.getElementById('productsContainer').innerHTML =
+                    '<div class="empty-state" style="grid-column:1/-1;"><h3>Connection Error</h3><p>⚠️ Unable to load products. Check if backend is running.</p></div>';
+            }
+        }
+
+        async function loadMyProducts() {
+            if (!authToken) {
+                document.getElementById('myProductsContainer').innerHTML =
+                    '<div class="empty-state" style="grid-column:1/-1;"><h3>Login Required</h3><p>🔒 Please login to view your passports</p></div>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/passports/my`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const products = await response.json();
+                displayMyProducts(products);
+            } catch (error) {
+                document.getElementById('myProductsContainer').innerHTML =
+                    '<div class="empty-state" style="grid-column:1/-1;"><h3>Error</h3><p>⚠️ Failed to load your products</p></div>';
+            }
+        }
+
+        function displayPublicProducts(products) {
+            const container = document.getElementById('productsContainer');
+
+            if (!products || products.length === 0) {
+                container.innerHTML =
+                    '<div class="empty-state" style="grid-column:1/-1;"><h3>No public passports yet</h3><p>🌍 Be the first to share a product passport!</p></div>';
+                return;
+            }
+
+            container.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <div class="product-header">
+                        <h3>${product.productName}</h3>
+                        <p>Serial: ${product.serialNumber}</p>
+                    </div>
+                    <div class="product-body">
+                        <div class="status-badge">${product.status || 'Active'}</div>
+                        <div class="product-details"><strong>📧 Student:</strong> ${product.studentEmail}</div>
+                        <div class="product-details"><strong>🏷️ Product #:</strong> ${product.productNumber}</div>
+                        <div class="product-details"><strong>⏱️ Lifetime:</strong> ${product.averageLifetime} years</div>
+                        <div class="product-details"><strong>♻️ Recycled:</strong> ${product.recycledContent}%</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function displayMyProducts(products) {
+            const container = document.getElementById('myProductsContainer');
+
+            if (!products || products.length === 0) {
+                container.innerHTML =
+                    '<div class="empty-state" style="grid-column:1/-1;"><h3>No passports yet</h3><p>📝 <button class="btn btn-primary" onclick="switchPage(\'submit\')">Create Your First Passport</button></p></div>';
+                return;
+            }
+
+            container.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <div class="product-header">
+                        <h3>${product.productName}</h3>
+                        <p>Serial: ${product.serialNumber}</p>
+                    </div>
+                    <div class="product-body">
+                        <div class="status-badge">${product.isPublic ? '🌍 Public' : '🔒 Private'}</div>
+                        <div class="product-details"><strong>🏷️ Product #:</strong> ${product.productNumber}</div>
+                        <div class="product-details"><strong>⏱️ Lifetime:</strong> ${product.averageLifetime} years</div>
+                        <div class="product-details"><strong>📅 Updated:</strong> ${new Date(product.updatedAt).toLocaleDateString()}</div>
+                        <div class="product-actions">
+                            <button class="btn-delete" onclick="deletePassport('${product._id}')">🗑️ Delete</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function deletePassport(id) {
+            if (!confirm('Are you sure? This action cannot be undone.')) return;
+
+            try {
+                const response = await fetch(`${API_URL}/passports/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                if (response.ok) {
+                    alert('✅ Passport deleted successfully');
+                    loadMyProducts();
+                } else {
+                    alert('❌ Failed to delete passport');
+                }
+            } catch (error) {
+                alert('❌ Error: ' + error.message);
+            }
+        }
+
+        // FORM SUBMISSION
+        document.getElementById('passportForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!authToken) {
+                alert('❌ Please login first');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('productName', document.getElementById('productName').value);
+            formData.append('serialNumber', document.getElementById('serialNumber').value);
+            formData.append('productNumber', document.getElementById('productNumber').value);
+            formData.append('manufacturingDate', document.getElementById('manufacturingDate').value);
+            formData.append('countryOfOrigin', document.getElementById('countryOfOrigin').value);
+            formData.append('averageLifetime', document.getElementById('averageLifetime').value);
+            formData.append('recycledContent', document.getElementById('recycledContent').value);
+            formData.append('materialComposition', document.getElementById('materialComposition').value);
+            formData.append('sparePartsAvailability', document.getElementById('sparePartsAvailability').value);
+            formData.append('isPublic', document.getElementById('isPublic').checked);
+
+            const fileInput = document.getElementById('files');
+            if (fileInput.files.length > 0) {
+                Array.from(fileInput.files).forEach(file => {
+                    formData.append('files', file);
+                });
+            }
+
+            document.getElementById('submitLoading').classList.add('show');
+
+            try {
+                const response = await fetch(`${API_URL}/passports`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${authToken}` },
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('✅ Passport submitted successfully!');
+                    document.getElementById('passportForm').reset();
+                    document.getElementById('fileList').style.display = 'none';
+                    document.getElementById('submitLoading').classList.remove('show');
+                    switchPage('my-products');
+                    loadMyProducts();
+                } else {
+                    alert('❌ Error: ' + (data.error || 'Submission failed'));
+                    document.getElementById('submitLoading').classList.remove('show');
+                }
+            } catch (error) {
+                alert('❌ Error: ' + error.message);
+                document.getElementById('submitLoading').classList.remove('show');
+            }
+        });
+
+        // INIT
+        updateAuthUI();
+    </script>
 </body>
 </html>
