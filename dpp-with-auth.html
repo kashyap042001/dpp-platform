@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Digital Product Passport System</title>
+<style>
+/* Basic styles for simplicity */
+body { font-family: Arial, sans-serif; margin: 0; background: #f5f5f5; }
+header { background: #003366; color: #fff; padding: 1em; text-align: center; }
+nav { display: flex; justify-content: center; margin-top: 10px; }
+nav button { margin: 0 10px; padding: 10px 20px; border: none; background: #0066cc; color: #fff; cursor: pointer; border-radius: 4px; }
+nav button:hover { background: #0055aa; }
+section { padding: 20px; display: none; }
+section.active { display: block; background: #fff; max-width: 1000px; margin: auto; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+button { padding: 10px 20px; margin: 10px 0; border: none; border-radius: 4px; background: #0066cc; color: #fff; cursor: pointer; }
+button:hover { background: #0055aa; }
+input, select, textarea { width: 100%; padding: 8px; margin-top: 4px; margin-bottom: 10px; border-radius: 4px; border: 1px solid #ccc; }
+.value-display { background: #eef; padding: 10px; border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<header>
+<h1>Digital Product Passport</h1>
+<div id="auth-section">
+  <button id="show-login">Login</button>
+  <button id="show-register">Register</button>
+</div>
+<div id="user-info" style="display:none;">
+  Welcome, <span id="user-name"></span> | <button id="logout">Logout</button>
+</div>
+</header>
+<nav>
+  <button data-target="home" class="nav-btn">Home</button>
+  <button data-target="products" class="nav-btn">Products</button>
+  <button data-target="submit" class="nav-btn">Submit Passport</button>
+</nav>
+
+<!-- Login Modal -->
+<div id="login-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#0007; align-items:center; justify-content:center;">
+  <div style="background:#fff; padding:20px; border-radius:8px;">
+    <h3>Login</h3>
+    <input type="email" id="login-email" placeholder="Email"/>
+    <input type="password" id="login-password" placeholder="Password"/>
+    <button id="login-submit">Login</button>
+    <button id="close-login">Close</button>
+  </div>
+</div>
+<!-- Register Modal -->
+<div id="register-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#0007; align-items:center; justify-content:center;">
+  <div style="background:#fff; padding:20px; border-radius:8px;">
+    <h3>Register</h3>
+    <input type="text" id="register-name" placeholder="Name"/>
+    <input type="email" id="register-email" placeholder="Email"/>
+    <input type="password" id="register-password" placeholder="Password"/>
+    <button id="register-submit">Register</button>
+    <button id="close-register">Close</button>
+  </div>
+</div>
+
+<!-- Main Sections -->
+<section id="home" class="active">
+<h2>Welcome to the Digital Product Passport System</h2>
+<p>Use the navigation above to view products, submit new passports, or learn more.</p>
+</section>
+
+<section id="products">
+<h2>All Public Product Passports</h2>
+<div id="product-list">Loading...</div>
+</section>
+
+<section id="submit">
+<h2>Submit a New Passport</h2>
+<form id="passport-form">
+<h3>Product Identification</h3>
+<input type="text" id="productName" placeholder="Product Name" required />
+<input type="text" id="serialNumber" placeholder="Serial Number" required />
+<input type="text" id="productNumber" placeholder="Product Number" />
+<input type="date" id="manufacturingDate" required />
+<input type="text" id="countryOfOrigin" placeholder="Country of Origin" />
+
+<h3>Materials & Specs</h3>
+<textarea id="materials" placeholder="Material Composition"></textarea>
+<input type="text" id="materialsHazardous" placeholder="Hazardous Substances" />
+<select id="spareParts">
+  <option value="Yes">Spare Parts Available</option>
+  <option value="No">Spare Parts Not Available</option>
+</select>
+
+<h3>Bill of Materials</h3>
+<textarea id="billOfMaterials" placeholder="Components and specs"></textarea>
+
+<h3>Guidelines & Manuals (Upload PDF files)</h3>
+<input type="file" id="pdfManual" multiple accept="application/pdf" required />
+<br/>
+
+<h3>Usage & Service</h3>
+<textarea id="usageConditions" placeholder="Environmental Conditions"></textarea>
+<input type="number" id="maxHours" placeholder="Max Hours per Year" />
+
+<h3>Student Info</h3>
+<input type="text" id="studentName" placeholder="Your Name"/>
+<input type="email" id="studentEmail" placeholder="Your Email"/>
+
+<label>
+  Make Passport Public?
+  <input type="checkbox" id="isPublic" />
+</label>
+
+<button type="submit">Submit Passport</button>
+</form>
+<div id="form-message"></div>
+</section>
+
+<script>
+// Store API URL (update after deployment)
+const API_URL = 'http://localhost:3000';
+
+// Elements
+const navButtons = document.querySelectorAll('.nav-btn');
+const sections = document.querySelectorAll('section');
+const loginBtn = document.getElementById('show-login');
+const registerBtn = document.getElementById('show-register');
+const loginModal = document.getElementById('login-modal');
+const registerModal = document.getElementById('register-modal');
+const loginClose = document.getElementById('close-login');
+const registerClose = document.getElementById('close-register');
+const loginFormBtn = document.getElementById('login-submit');
+const registerFormBtn = document.getElementById('register-submit');
+
+const userInfoDiv = document.getElementById('user-info');
+const userNameSpan = document.getElementById('user-name');
+let authToken = null;
+let currentUserId = null;
+
+// Utility functions
+function showSection(id) {
+  sections.forEach(s => s.classList.toggle('active', s.id === id));
+}
+navButtons.forEach(btn => {
+  btn.onclick = () => showSection(btn.dataset.target);
+}
+
+// Show/hide modals
+document.getElementById('show-login').onclick = () => { loginModal.style.display='flex'; }
+document.getElementById('show-register').onclick = () => { registerModal.style.display='flex'; }
+loginClose.onclick = () => { loginModal.style.display='none'; }
+registerClose.onclick = () => { registerModal.style.display='none'; }
+
+// Authentication
+async function register() {
+  const name = document.getElementById('register-name').value;
+  const email = document.getElementById('register-email').value;
+  const password = document.getElementById('register-password').value;
+  const res = await fetch(API_URL + '/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, email, password })
+  });
+  const data = await res.json();
+  alert(data.message);
+  if (res.ok) {
+    loginModal.style.display='none';
+    // Auto login after registration? Optional
+  }
+}
+
+async function login() {
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+  const res = await fetch(API_URL + '/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password })
+  });
+  const data = await res.json();
+  if (res.ok && data.token) {
+    authToken = data.token;
+    localStorage.setItem('token', authToken);
+    localStorage.setItem('email', email);
+    // Get user info
+    alert('Login successful');
+    document.getElementById('show-login').style.display='none';
+    document.getElementById('show-register').style.display='none';
+    userInfoDiv.style.display='block';
+    document.getElementById('user-name').textContent = email;
+    loadUserData();
+    loginModal.style.display='none';
+  } else {
+    alert('Login failed: ' + (data.message || 'Unknown error'));
+  }
+}
+
+document.getElementById('login-submit').onclick = () => { login(); };
+document.getElementById('register-submit').onclick = () => { register(); };
+document.getElementById('logout').onclick = () => {
+  authToken = null;
+  localStorage.removeItem('token');
+  localStorage.removeItem('email');
+  userInfoDiv.style.display='none';
+  alert('Logged out');
+};
+window.onload = () => {
+  // auto login
+  const token = localStorage.getItem('token');
+  if (token) {
+    authToken = token;
+    userInfoDiv.style.display='block';
+    document.getElementById('show-login').style.display='none';
+    document.getElementById('show-register').style.display='none';
+    document.getElementById('user-name').textContent = localStorage.getItem('email');
+    loadUserData();
+  }
+};
+
+// Load user data
+async function loadUserData() {
+  if (!authToken) return;
+  // Load Passport list
+  await loadPassports();
+}
+
+// Load passports
+async function loadPassports() {
+  const url = `${API_URL}/passports/public`;
+  const res = await fetch(url);
+  const data = await res.json();
+  const container = document.getElementById('product-list');
+  container.innerHTML = '';
+  if (data.length === 0) {
+    container.innerHTML = 'No public passports yet.';
+    return;
+  }
+  data.forEach(p => {
+    const div = document.createElement('div');
+    div.style.border='1px solid #ccc'; div.style.padding='10px'; div.style.margin='10px 0';
+    div.innerHTML = `
+      <strong>${p.productName}</strong> (${p.serialNumber})<br/>
+      Submitted by: ${p.studentNotes || 'Anonymous'}<br/>
+      Date: ${new Date(p.dateSubmitted).toLocaleString()}<br/>
+      ${p.isPublic ? '<em>Public</em>' : '<em>Private</em>'}<br/>
+      <button onclick="viewPassport('${p.id}')">View Details</button>
+    `;
+    container.appendChild(div);
+  });
+}
+
+// View passport details
+async function viewPassport(id) {
+  const res = await fetch(`${API_URL}/passports/public`);
+  const data = await res.json();
+  const passport = data.find(p => p.id === id);
+  if (!passport) { alert('Not found'); return; }
+
+  alert(`Product: ${passport.productName}
+Serial: ${passport.serialNumber}
+Notes: ${passport.studentNotes}
+Submitted: ${new Date(passport.dateSubmitted).toLocaleString()}
+Public: ${passport.isPublic ? 'Yes' : 'No'}
+`);
+}
+
+// Handle form submission
+document.getElementById('passport-form').onsubmit = async (e) => {
+  e.preventDefault();
+  const formData = new FormData();
+  formData.append('productName', document.getElementById('productName').value);
+  formData.append('serialNumber', document.getElementById('serialNumber').value);
+  formData.append('productNumber', document.getElementById('productNumber').value);
+  formData.append('manufacturingDate', document.getElementById('manufacturingDate').value);
+  formData.append('countryOfOrigin', document.getElementById('countryOfOrigin').value);
+  formData.append('materials', document.getElementById('materials').value);
+  formData.append('materialsHazardous', document.getElementById('materialsHazardous').value);
+  formData.append('spareParts', document.getElementById('spareParts').value);
+  formData.append('billOfMaterials', document.getElementById('billOfMaterials').value);
+  formData.append('usageConditions', document.getElementById('usageConditions').value);
+  formData.append('maxHours', document.getElementById('maxHours').value);
+  formData.append('studentNotes', document.getElementById('studentName').value);
+  formData.append('isPublic', document.getElementById('isPublic').checked);
+  // Files
+  const files = document.getElementById('pdfManual').files;
+  for (let i=0; i<files.length; i++) {
+    formData.append('pdfs', files[i]);
+  }
+
+  const res = await fetch(API_URL + '/passports', {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + authToken },
+    body: formData
+  });
+  const data = await res.json();
+  if (res.ok) {
+    document.getElementById('form-message').textContent = 'Passport submitted successfully!';
+    loadPassports(); // refresh list
+  } else {
+    alert('Error: ' + (data.message || 'unknown'));
+  }
+};
+</script>
+</body>
+</html>
