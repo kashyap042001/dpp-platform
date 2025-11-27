@@ -1,14 +1,35 @@
 {
   "name": "dpp-platform",
   "version": "1.0.0",
-  "description": "Digital Product Passport with Student Authentication",
-  "main": "server-auth.js",
+  "description": "Digital Product Passport Platform - TU Clausthal",
+  "main": "server-complete.js",
   "scripts": {
-    "start": "node server-auth.js"
+    "start": "node server-complete.js",
+    "dev": "nodemon server-complete.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [
+    "dpp",
+    "passport",
+    "digital",
+    "product",
+    "sustainability"
+  ],
+  "author": "TU Clausthal",
+  "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.0.0",
     "multer": "^1.4.5-lts.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }
